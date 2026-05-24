@@ -1,8 +1,7 @@
 let usermodel=require("../model/user");
 const express = require("express");
 let router = express.Router();
-const { register, login } = require("../controller/user");
-const { dashboard, profile, updateProfile } = require("../service/user");
+const { dashboard, profile, updateProfile,register,login } = require("../service/user");
 let auth=require("../middleware/user");
 
 router.post("/register",register);

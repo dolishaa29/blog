@@ -1,6 +1,7 @@
 let rec=require("../model/user");
 let jwt=require("jsonwebtoken");
 let bct=require("bcrypt");
+let cloudinary=require("../config/cloudinary");
 
 exports.register=async(req,res)=>{
     try{
@@ -10,7 +11,11 @@ exports.register=async(req,res)=>{
         let password=req.body.password;
         let contact=req.body.contact;
         let address=req.body.address;
-      
+        let imageUrl = "";
+        if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        imageUrl = result.secure_url;
+       }
         let user=await rec.findOne({email:email});
         console.log("user",user);
         if(user)
@@ -19,7 +24,7 @@ exports.register=async(req,res)=>{
         }
         else{
             let hash=await bct.hash(password,10);
-            let user=new rec({name:name,email:email,password:hash,contact:contact,address:address});
+            let user=new rec({name:name,email:email,password:hash,contact:contact,address:address,image:imageUrl});
             await user.save();
             res.status(201).json({msg: "User registered successfully",data:user});
         }
@@ -97,8 +102,12 @@ exports.profile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const userId = req.user._id;
-
     const { name, email, contact, address } = req.body;
+    let imageUrl="";
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      imageUrl = result.secure_url;
+    }
 
     const updated = await rec.findByIdAndUpdate(
       userId,
@@ -107,6 +116,7 @@ exports.updateProfile = async (req, res) => {
         email,
         contact,
         address,
+        image: imageUrl,
       },
       { new: true }
     );
