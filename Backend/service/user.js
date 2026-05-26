@@ -1,6 +1,6 @@
 let rec=require("../model/user");
 let jwt=require("jsonwebtoken");
-let bct=require("bcrypt");
+let bct=require("bcryptjs");
 let cloudinary=require("../config/cloudinary");
 
 exports.register=async(req,res)=>{
@@ -12,19 +12,22 @@ exports.register=async(req,res)=>{
         let contact=req.body.contact;
         let address=req.body.address;
         let imageUrl = "";
+        console.log("req.file",req.file);
         if (req.file) {
         const result = await cloudinary.uploader.upload(req.file.path);
         imageUrl = result.secure_url;
+        console.log("imageUrl",imageUrl);
        }
         let user=await rec.findOne({email:email});
-        console.log("user",user);
+        console.log(" exist user",user);
         if(user)
         {
             return res.status(400).json({msg: "User already exists"});
         }
         else{
             let hash=await bct.hash(password,10);
-            let user=new rec({name:name,email:email,password:hash,contact:contact,address:address,image:imageUrl});
+            let user=new rec({name:name,email:email,password:hash,contact:contact,address:address,profile:imageUrl});
+            console.log("new user",user);
             await user.save();
             res.status(201).json({msg: "User registered successfully",data:user});
         }

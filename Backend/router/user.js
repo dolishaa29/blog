@@ -6,7 +6,7 @@ let auth=require("../middleware/user");
 const upload = require("../middleware/multer"); 
 const cloudinary = require("../config/cloudinary");
 
-router.post("/register", upload.single("image"), register);
+router.post("/register", upload.single("profile"), register);
 router.post("/login",login);
 router.get('/dashboard',auth,dashboard);
 router.get('/profile',auth,profile);
