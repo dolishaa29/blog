@@ -31,7 +31,6 @@ const Login = () => {
       )
 
       if (response.status === 200 && response.data.token) {
-        // Token cookie mein save ho raha hai 1 day expire limit ke sath
         Cookies.set("token", response.data.token, { expires: 1 })
         navigate("/dashboard")
       } else {
@@ -50,13 +49,11 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         
-        {/* Header Title */}
         <div className="mb-6 text-center">
           <h2 className="text-3xl font-bold text-gray-800">Sign In</h2>
           <p className="text-gray-500 mt-1 text-sm">Please login to continue</p>
         </div>
 
-        {/* Error Alert */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-2.5 rounded-xl mb-4 text-center">
             {error}
@@ -107,7 +104,6 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Bottom Navigation */}
         <p className="text-sm text-gray-500 mt-5 text-center">
           Don't have an account?{" "}
           <Link to="/register" className="text-indigo-600 font-semibold hover:underline">
