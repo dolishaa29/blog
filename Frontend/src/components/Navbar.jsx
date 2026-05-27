@@ -5,7 +5,6 @@ import Cookies from 'js-cookie'
 const Navbar = () => {
   const navigate = useNavigate()
 
-  // Check karo user logged in hai ya nahi
   const token = Cookies.get('token')
   const isLoggedIn = !!token
 
@@ -16,19 +15,12 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
-
-      {/* Logo */}
       <Link to="/" className="text-xl font-bold text-indigo-600">BlogApp</Link>
-
-      {/* Links */}
       <div className="flex items-center gap-4">
-
-        {/* Explore sabke liye */}
         <Link to="/" className="text-sm text-gray-600 hover:text-indigo-600 transition">
           Explore
         </Link>
 
-        {/* Agar logged in hai toh ye links dikhenge */}
         {isLoggedIn ? (
           <>
             <Link to="/dashboard" className="text-sm text-gray-600 hover:text-indigo-600 transition">
@@ -48,7 +40,6 @@ const Navbar = () => {
             </button>
           </>
         ) : (
-          /* Agar logged out hai toh Login/Signup dikhega */
           <>
             <Link
               to="/login"

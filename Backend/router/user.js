@@ -1,13 +1,14 @@
 let usermodel=require("../model/user");
 const express = require("express");
 let router = express.Router();
-const { dashboard, profile, updateProfile,register,login } = require("../service/user");
+const { dashboard, profile, updateProfile, register, login, googleLogin } = require("../service/user");
 let auth=require("../middleware/user");
 const upload = require("../middleware/multer"); 
 const cloudinary = require("../config/cloudinary");
 
 router.post("/register", upload.single("profile"), register);
-router.post("/login",login);
+router.post("/login", login);
+router.post("/googleLogin", googleLogin); // Google OAuth
 router.get('/dashboard',auth,dashboard);
 router.get('/profile',auth,profile);
 router.post('/updateprofile',auth,upload.single("image"),updateProfile);

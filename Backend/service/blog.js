@@ -44,6 +44,8 @@ exports.addBlog = async (req, res) => {
 };
 
 
+
+
 exports.viewUserBlogs = async (req, res) => {
   try {
     const user = req.user._id;
@@ -60,6 +62,8 @@ exports.viewUserBlogs = async (req, res) => {
     });
   }
 };
+
+
 
 
 exports.editBlog = async (req, res) => {
@@ -116,6 +120,7 @@ exports.editBlog = async (req, res) => {
 };
 
 
+
 exports.deleteBlog = async (req, res) => {
   try {
     const blogId = req.params.id;
@@ -143,6 +148,7 @@ exports.deleteBlog = async (req, res) => {
     });
   }
 };
+
 
 
 exports.singleUserBlog = async (req, res) => {
@@ -179,7 +185,6 @@ exports.singleUserBlog = async (req, res) => {
 
 exports.exploreAllBlogs = async (req, res) => {
   try {
-    // Sirf published blogs dikhao explore mein
     const blogs = await Blog.find({ Status: "Published" });
     return res.status(200).json({
       success: true,

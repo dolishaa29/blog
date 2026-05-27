@@ -2,6 +2,8 @@ let rec=require("../model/user");
 let jwt=require("jsonwebtoken");
 let bct=require("bcryptjs");
 let cloudinary=require("../config/cloudinary");
+const { OAuth2Client } = require("google-auth-library");
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.register=async(req,res)=>{
     try{
@@ -42,6 +44,8 @@ exports.register=async(req,res)=>{
     }
 }
 
+
+
 exports.login=async(req,res)=>
 {
     try{
@@ -81,6 +85,8 @@ exports.login=async(req,res)=>
 
 }
 
+
+
 exports.dashboard=async(req,res)=>
 {
     const user =  req.user;
@@ -90,6 +96,8 @@ exports.dashboard=async(req,res)=>
     },
     });
 }
+
+
 
 exports.profile = async (req, res) => {
   try {
@@ -101,6 +109,50 @@ exports.profile = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+
+exports.googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+    
+    console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+
+    if (!credential) {
+      return res.status(400).json({ error: "No credential provided" });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    console.log("Payload:", payload);
+    const { email, name, picture } = payload;
+    let user = await rec.findOne({ email });
+
+    if (!user) {
+      user = new rec({ name, email, image: picture });
+      await user.save();
+    }
+
+    const token = jwt.sign({ token: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
+    return res.status(200).json({ success: true, token, msg: "Google login successful" });
+
+  } catch (err) {
+    console.log("Google login error:", err);
+    return res.status(500).json({ error: "Google login failed", message: err.message });
+  }
+};
+
 
 exports.updateProfile = async (req, res) => {
   try {

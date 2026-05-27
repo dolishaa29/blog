@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import axios from "axios"
+import Cookies from "js-cookie"
 import { useNavigate, Link } from "react-router-dom"
+import { GoogleLogin } from "@react-oauth/google"
 
 const Register = () => {
   const navigate = useNavigate()
@@ -85,6 +87,21 @@ const Register = () => {
       setLoading(false)
     }
   }
+  
+  const handleGoogleSignup = async (credentialResponse) => {
+    try {
+      const res = await axios.post(
+        import.meta.env.VITE_API_URL + "/googleLogin",
+        { credential: credentialResponse.credential }
+      )
+      if (res.data.success && res.data.token) {
+        Cookies.set("token", res.data.token, { expires: 1 })
+        navigate("/dashboard")
+      }
+    } catch (err) {
+      setError("Google signup failed. Please try again.")
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
@@ -100,6 +117,24 @@ const Register = () => {
             {error}
           </div>
         )}
+
+        <div className="flex justify-center mb-4">
+          <GoogleLogin
+            onSuccess={handleGoogleSignup}
+            onError={() => setError("Google signup failed.")}
+            text="signup_with"
+            shape="rectangular"
+            theme="outline"
+            size="large"
+          />
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex-1 h-px bg-gray-200" />
+          <span className="text-xs text-gray-400">ya manually fill karo</span>
+          <div className="flex-1 h-px bg-gray-200" />
+        </div>
 
         <form onSubmit={sendData} className="space-y-4">
           
