@@ -179,7 +179,8 @@ exports.singleUserBlog = async (req, res) => {
 
 exports.exploreAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find();
+    // Sirf published blogs dikhao explore mein
+    const blogs = await Blog.find({ Status: "Published" });
     return res.status(200).json({
       success: true,
       blogs: blogs,

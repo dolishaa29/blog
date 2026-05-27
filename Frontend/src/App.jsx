@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ViewBlog from './pages/ViewBlog'
 import Profile from './pages/Profile'
@@ -13,9 +12,13 @@ function App() {
  return (
   <BrowserRouter>
     <Routes>
-      <Route path='/register' element={<Register />} />
-      <Route path='/' element={<Login />} />
+      {/* Home aur Explore dono same page */}
+      <Route path='/' element={<Explore />} />
       <Route path='/explore' element={<Explore />} />
+      {/* Login / Register */}
+      <Route path='/login' element={<Login />} />
+      <Route path='/register' element={<Register />} />
+      {/* Protected pages */}
       <Route path='/dashboard' element={<Dashboard />} />
       <Route path='/addblog' element={<AddBlog />} />
       <Route path='/viewblog/:id' element={<ViewBlog />} />

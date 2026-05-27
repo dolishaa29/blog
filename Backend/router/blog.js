@@ -3,16 +3,7 @@ const router = express.Router();
 const auth = require("../middleware/user");
 const upload = require("../middleware/multer");
 
-const { 
-  addBlog, 
-  viewUserBlogs, 
-  editBlog, 
-  deleteBlog, 
-  singleUserBlog, 
-  exploreAllBlogs, 
-  exploreSingleBlog 
-} = require("../service/blog"); 
-
+const { addBlog, viewUserBlogs, editBlog, deleteBlog, singleUserBlog, exploreAllBlogs, exploreSingleBlog } = require("../service/blog"); 
 
 router.post("/addBlog", auth, upload.single("image"), addBlog);
 router.get("/viewUserBlogs", auth, viewUserBlogs);
